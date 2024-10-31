@@ -1,0 +1,28 @@
+/* src/components/PrizeHistory.css */
+
+.history-container {
+    width: 100%;
+    max-width: 280px;
+    margin-top: 20px;
+    padding: 1em;
+    border-radius: 8px;
+    background-color: #ffffffb3;
+    color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .history-container h2 {
+    font-size: 1.2em;
+    margin-bottom: 1em;
+  }
+  
+  .history-container ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .history-container li {
+    margin-bottom: 0.5em;
+    font-size: 0.9em;
+  }
+  
