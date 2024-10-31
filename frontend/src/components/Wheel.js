@@ -1,12 +1,13 @@
 // src/components/Wheel.js
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Wheel.css';
 
 function Wheel({ username }) {
     const [isSpinning, setIsSpinning] = useState(false);
     const [prize, setPrize] = useState(null);
-    const [error, setError] = useState(null);
     const [prizes, setPrizes] = useState([]);
     const [rotation, setRotation] = useState(0); // Ângulo de rotação
 
@@ -16,9 +17,17 @@ function Wheel({ username }) {
             try {
                 const response = await api.get('/api/prizes');
                 setPrizes(response.data);
+                toast.success("Premios carregados com sucesso!")
             } catch (err) {
                 console.error("Erro ao buscar prêmios:", err);
-                setError("Erro ao carregar prêmios.");
+                toast.warn("Erro ao carregar prêmios. Tente novamente mais tarde.", {
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
         };
         fetchPrizes();
@@ -37,7 +46,6 @@ function Wheel({ username }) {
     const spinWheel = () => {
         if (isSpinning || prizes.length === 0) return;
         setIsSpinning(true);
-        setError(null);
 
         const wonPrize = getRandomPrize();
         setPrize(wonPrize.name);
@@ -56,13 +64,21 @@ function Wheel({ username }) {
         })
         .catch(err => {
             console.error("Erro ao salvar no histórico:", err);
-            setError("Erro ao salvar no histórico de prêmios.");
+            toast.error("Erro ao salvar no histórico de prêmios. Tente novamente.", {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         })
         .finally(() => setIsSpinning(false));
     };
 
     return (
         <div className="wheel-container">
+            <ToastContainer />
             <div className={`wheel ${isSpinning ? 'spinning' : ''}`} style={{ transform: `rotate(${rotation}deg)` }}>
                 {prizes.map((prize, index) => (
                     <div key={index} className="wheel-segment">
@@ -74,7 +90,6 @@ function Wheel({ username }) {
                 {isSpinning ? 'Girando...' : 'Girar a Roleta'}
             </button>
             {prize && <p>Você ganhou: {prize}!</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
     );
 }
