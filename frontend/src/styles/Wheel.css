@@ -1,4 +1,4 @@
-/* src/components/Wheel.css */
+/* src/styles/Wheel.css */
 
 .wheel-container {
   display: flex;
@@ -9,18 +9,27 @@
 }
 
 .wheel {
-  width: 180px;
-  height: 180px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  transition: transform 3s cubic-bezier(0.33, 1, 0.68, 1);
+  transition: transform 3s cubic-bezier(0.33, 1, 0.68, 1); /* Transição suave */
 }
 
 .spinning {
-  transform: rotate(1080deg);
+  animation: spin 1s linear infinite; /* Giro contínuo enquanto está girando */
+}
+
+@keyframes spin {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(360deg);
+  }
 }
 
 .wheel-segment {
