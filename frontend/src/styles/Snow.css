@@ -1,0 +1,50 @@
+/* src/styles/global.css */
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Cores principais para o tema natalino */
+  body {
+    color: #FFF;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden; /* Impede rolagem horizontal */
+  }
+  
+  /* Efeito de neve caindo */
+  /* src/styles/Snow.css */
+
+@keyframes snow-fall {
+    from {
+      transform: translateY(-10px);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(96vh); /* Faz os flocos caírem até a parte inferior da viewport */
+      opacity: 0;
+    }
+  }
+  
+  .snowflake {
+    position: absolute;
+    top: -10px;
+    color: #FFF;
+    font-size: 1em;
+    opacity: 0.8;
+    animation: snow-fall 10s linear infinite;
+    pointer-events: none;
+    left: calc(100vw * var(--random-position)); /* Limita a posição inicial ao viewport */
+  }
+  
+  .snowflake:nth-child(odd) {
+    animation-duration: 8s;
+  }
+  
+  .snowflake:nth-child(even) {
+    animation-duration: 12s;
+  }
+  
+  

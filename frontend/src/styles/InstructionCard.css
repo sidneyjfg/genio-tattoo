@@ -1,0 +1,83 @@
+/* src/styles/InstructionCard.css */
+
+.instruction-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 300px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+}
+
+.instruction-card h2 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.instruction-card ol {
+    list-style: decimal;
+    padding-left: 20px;
+    text-align: left;
+}
+
+.instruction-card li {
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+.highlight {
+    color: #ADD8E6;
+}
+
+.button-container {
+    display: flex;
+    gap: 15px;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    color: white;
+    background: #4CAF50;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.button:hover {
+    background: #3e8e41;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 15px rgba(0, 128, 0, 0.3);
+}
+
+.button:active {
+    transform: scale(0.95);
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 600px) {
+    .instruction-container {
+        max-width: 90%;
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .instruction-card h2 {
+        font-size: 1.5em;
+    }
+
+    .instruction-card li {
+        font-size: 0.9em;
+    }
+
+    .button {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+}

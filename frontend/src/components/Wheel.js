@@ -1,95 +1,89 @@
-// src/components/Wheel.js
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Wheel.css';
 
-function Wheel({ username }) {
-    const [isSpinning, setIsSpinning] = useState(false);
-    const [prize, setPrize] = useState(null);
+function Wheel({ username, onPrizeWon }) {
     const [prizes, setPrizes] = useState([]);
-    const [rotation, setRotation] = useState(0); // Ângulo de rotação
+    const [currentPrize, setCurrentPrize] = useState('');
+    const [isRolling, setIsRolling] = useState(false);
+    const [selectedPrize, setSelectedPrize] = useState('');
+    const [animate, setAnimate] = useState(false);
 
-    // Busca prêmios do banco ao carregar o componente
+    // Carrega os prêmios do banco de dados quando o componente é montado
     useEffect(() => {
         const fetchPrizes = async () => {
             try {
                 const response = await api.get('/api/prizes');
-                setPrizes(response.data);
-                toast.success("Premios carregados com sucesso!")
-            } catch (err) {
-                console.error("Erro ao buscar prêmios:", err);
-                toast.warn("Erro ao carregar prêmios. Tente novamente mais tarde.", {
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+                setPrizes(response.data.map(prize => prize.name)); // Ajusta conforme a estrutura de dados do seu backend
+            } catch (error) {
+                console.error("Erro ao carregar prêmios:", error);
             }
         };
         fetchPrizes();
     }, []);
 
-    // Função para selecionar um prêmio considerando as probabilidades
-    const getRandomPrize = () => {
-        const totalWeight = prizes.reduce((sum, prize) => sum + prize.probability, 0);
-        let random = Math.random() * totalWeight;
-        for (let i = 0; i < prizes.length; i++) {
-            if (random < prizes[i].probability) return prizes[i];
-            random -= prizes[i].probability;
+    // Lógica de rotação
+    useEffect(() => {
+        if (isRolling && prizes.length > 0) {
+            let index = 0;
+            let tempoDecorrido = 0;
+            let rotationDuration = 200; // Velocidade inicial mais lenta
+
+            const animationInterval = setInterval(() => {
+                setAnimate(false); // Remove a animação temporariamente
+                setTimeout(() => setAnimate(true), 10); // Reaplica a animação
+
+                setCurrentPrize(prizes[index]);
+                index = (index + 1) % prizes.length;
+                tempoDecorrido += rotationDuration;
+
+                // Gradualmente desacelera a rotação nos últimos 2 segundos
+                if (tempoDecorrido >= 3000) {
+                    rotationDuration += 30; // Aumenta o intervalo para desaceleração progressiva
+                }
+
+                // Para a rotação e exibe o prêmio ganho
+                if (tempoDecorrido >= 5000) {
+                    clearInterval(animationInterval);
+                    setCurrentPrize(`Seu prêmio é: ${selectedPrize}`);
+                    setIsRolling(false);
+
+                    // Grava o prêmio no histórico
+                    api.post('/api/history/add', {
+                        username: username || 'Usuário Anônimo',
+                        prize: selectedPrize
+                    })
+                    .then(() => {
+                        onPrizeWon();
+                    })
+                    .catch(err => {
+                        console.error("Erro ao salvar no histórico:", err);
+                    });
+                }
+            }, rotationDuration);
+
+            return () => clearInterval(animationInterval);
         }
-    };
+    }, [isRolling, prizes, selectedPrize, username, onPrizeWon]);
 
-    const spinWheel = () => {
-        if (isSpinning || prizes.length === 0) return;
-        setIsSpinning(true);
-
-        const wonPrize = getRandomPrize();
-        setPrize(wonPrize.name);
-
-        // Calcula a rotação final para que a roleta pare no prêmio sorteado
-        const prizeIndex = prizes.findIndex((p) => p.name === wonPrize.name);
-        const degreesPerPrize = 360 / prizes.length;
-        const rotationOffset = degreesPerPrize / 2; // Ajuste para centralizar o prêmio
-        const finalRotation = 360 * 5 + prizeIndex * degreesPerPrize + rotationOffset; // 5 voltas completas + posição do prêmio
-
-        setRotation(finalRotation);
-
-        api.post('/api/history/add', {
-            username: username || 'Usuário Anônimo',
-            prize: wonPrize.name
-        })
-        .catch(err => {
-            console.error("Erro ao salvar no histórico:", err);
-            toast.error("Erro ao salvar no histórico de prêmios. Tente novamente.", {
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        })
-        .finally(() => setIsSpinning(false));
+    // Seleciona o prêmio final antes de iniciar a rotação
+    const iniciarRoleta = () => {
+        const randomIndex = Math.floor(Math.random() * prizes.length);
+        setSelectedPrize(prizes[randomIndex]);
+        setIsRolling(true);
+        setAnimate(true); // Inicia a animação
     };
 
     return (
         <div className="wheel-container">
-            <ToastContainer />
-            <div className={`wheel ${isSpinning ? 'spinning' : ''}`} style={{ transform: `rotate(${rotation}deg)` }}>
-                {prizes.map((prize, index) => (
-                    <div key={index} className="wheel-segment">
-                        {prize.name}
-                    </div>
-                ))}
+            <div className="prize-display">
+                <div className={`prize-text ${animate ? 'animate' : ''}`}>
+                    {currentPrize || `Seu prêmio é: ${selectedPrize}`}
+                </div>
             </div>
-            <button onClick={spinWheel} disabled={isSpinning || prizes.length === 0}>
-                {isSpinning ? 'Girando...' : 'Girar a Roleta'}
+            <button onClick={iniciarRoleta} disabled={isRolling || prizes.length === 0}>
+                {isRolling ? 'Girando...' : 'Girar a Roleta'}
             </button>
-            {prize && <p>Você ganhou: {prize}!</p>}
         </div>
     );
 }

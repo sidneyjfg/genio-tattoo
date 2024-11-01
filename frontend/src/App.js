@@ -1,27 +1,16 @@
 // src/App.js
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Home from './pages/Home';
-import UsernamePrompt from './pages/UsernamePrompt';
-import './styles/index.css'
+import './App.css'
+import SnowEffect from './components/SnowEffect.js';
+
 
 function App() {
-    const [username, setUsername] = useState(localStorage.getItem("username") || "");
-
-    useEffect(() => {
-        const storedUsername = localStorage.getItem("username");
-        if (storedUsername) {
-            setUsername(storedUsername);
-        }
-    }, []);
-
     return (
-        <>
-            {username ? (
-                <Home username={username} />
-            ) : (
-                <UsernamePrompt setUsername={setUsername} />
-            )}
-        </>
+        <div className="app-container">
+            <SnowEffect /> {/* Adiciona o efeito de neve */}
+            <Home />
+        </div>
     );
 }
 

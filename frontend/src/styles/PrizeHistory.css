@@ -1,15 +1,27 @@
-/* src/styles/History.css */
+/* src/styles/PrizeHistory.css */
 
 .history-container {
   width: 100%;
   max-width: 300px;
-  margin: 0 auto; /* Centraliza horizontalmente */
+  max-height: 400px; /* Altura máxima para o histórico */
+  margin-top: 20px;
   padding: 1em;
   border-radius: 8px;
   background-color: #ffffffb3;
   color: #333;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
+  overflow-y: auto; /* Habilita rolagem vertical */
+}
+
+/* Estilo opcional para personalizar a barra de rolagem */
+.history-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.history-container::-webkit-scrollbar-thumb {
+  background-color: #007bff;
+  border-radius: 4px;
 }
 
 .history-container h2 {
@@ -20,9 +32,18 @@
 .history-container ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .history-container li {
   margin-bottom: 0.5em;
   font-size: 0.9em;
+}
+
+.username {
+  color: #007bff; /* Azul vibrante */
+  font-weight: bold;
+  background-color: #e0f7ff; /* Fundo claro para destacar */
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
 }
