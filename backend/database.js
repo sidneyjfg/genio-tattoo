@@ -1,17 +1,18 @@
-// backend/database.js
-require('dotenv').config();
 const { Sequelize } = require('sequelize');
 
+// Inicializa o Sequelize com as variáveis de ambiente
 const sequelize = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASS,
+    process.env.DB_NAME,        // Nome do banco de dados
+    process.env.DB_USER,        // Usuário do banco de dados
+    process.env.DB_PASS,        // Senha do banco de dados
     {
-        host: process.env.DB_HOST,
-        dialect: process.env.DB_DIALECT,
+        host: process.env.DB_HOST, // Host do banco
+        dialect: process.env.DB_DIALECT, // Dialeto (MySQL, Postgres, etc.)
+        port: process.env.DB_PORT || 3306, // Porta do banco (3306 por padrão para MySQL)
     }
 );
 
+// Testa a conexão com o banco
 (async () => {
     try {
         await sequelize.authenticate();
