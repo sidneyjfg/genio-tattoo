@@ -134,3 +134,28 @@ button:disabled {
     background-position: 0%;
   }
 }
+
+/* Botões de compartilhamento */
+.share-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.instagram-button, .whatsapp-button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+}
+
+.instagram-button {
+  background-color: #E1306C;
+}
+
+.whatsapp-button {
+  background-color: #25D366;
+}

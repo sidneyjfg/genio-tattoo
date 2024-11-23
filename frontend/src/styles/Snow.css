@@ -23,7 +23,7 @@
       opacity: 1;
     }
     to {
-      transform: translateY(96vh); /* Faz os flocos caírem até a parte inferior da viewport */
+      transform: translateY(95vh); /* Faz os flocos caírem até a parte inferior da viewport */
       opacity: 0;
     }
   }

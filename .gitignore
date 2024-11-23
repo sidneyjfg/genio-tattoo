@@ -1,2 +1,30 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Configurações de editor/IDE
+.vscode/
+.idea/
+
+# Arquivos sensíveis
 .env
-node_modules
+*.env.*
+config/
+credentials.json
+
+# Docker
+docker-compose.override.yml
+*.sql
+*.yml
+!genio-project.yml # Exclui, mas mantém um arquivo YAML específico

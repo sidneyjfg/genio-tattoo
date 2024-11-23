@@ -1,4 +1,3 @@
-// src/pages/Home.js
 import React, { useState, useRef } from 'react';
 import Wheel from '../components/Wheel';
 import PrizeHistory from '../components/PrizeHistory';
@@ -21,13 +20,24 @@ const Home = () => {
         <div className="home-container">
             {username ? (
                 <div className="content-container">
-                    <Wheel username={username} onPrizeWon={handlePrizeWon} />
-                    <InstructionCard />
+                    {/* Coluna da esquerda: Como participar */}
+                    <div className="left-column">
+                        <InstructionCard />
+                    </div>
+
+                    {/* Coluna central: Roleta */}
+                    <div className="center-column">
+                        <Wheel username={username} onPrizeWon={handlePrizeWon} />
+                    </div>
+
+                    {/* Coluna da direita: Histórico */}
+                    <div className="right-column">
+                        <PrizeHistory ref={prizeHistoryRef} />
+                    </div>
                 </div>
             ) : (
                 <UsernamePrompt setUsername={setUsername} />
             )}
-            {username && <PrizeHistory ref={prizeHistoryRef} />}
         </div>
     );
 };
